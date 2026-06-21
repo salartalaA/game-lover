@@ -94,6 +94,8 @@
   --sidebar-accent-foreground: hsl(0 0% 90%);
   --sidebar-border: hsl(240 6% 16%);
   --sidebar-ring: hsl(262 83% 58%);
+
+  --display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
 }
 
 @theme inline {
@@ -137,7 +139,7 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
-  --font-display: var("Space Grotesk", ui-sans-serif, system-ui, sans-serif);
+  --font-display: var(--display);
 }
 
 @layer base {
