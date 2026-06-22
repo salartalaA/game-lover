@@ -1,10 +1,11 @@
 "use client";
 
-import { Clock, Pencil, Star, Trash } from "lucide-react";
+import { Clock, Star, Trash } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import type { GameCardItem } from "../types/game-card";
+import EditCollectionDialog from "./edit-collection-dialog";
 import { Button } from "./ui/button";
 
 export default function GameCard({
@@ -93,12 +94,7 @@ export default function GameCard({
           </span>
         </div>
         <div className="flex items-center gap-1 border-border border-t pt-1">
-          <Button
-            className="flex flex-1 items-center justify-center gap-1.5 rounded-md py-1.5 text-muted-foreground text-xs transition-all hover:bg-primary/10 hover:text-primary"
-            variant={"ghost"}
-          >
-            <Pencil size={12} /> Edit
-          </Button>
+          <EditCollectionDialog />
 
           <Button
             className="flex flex-1 items-center justify-center gap-1.5 rounded-md py-1.5 text-muted-foreground text-xs transition-all hover:bg-destructive/10 hover:text-destructive"
