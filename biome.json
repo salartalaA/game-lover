@@ -20,7 +20,11 @@
       "recommended": true,
       "suspicious": {
         "noUnknownAtRules": "off",
-        "noArrayIndexKey": "off"
+        "noArrayIndexKey": "off",
+        "noDoubleEquals": "off"
+      },
+      "style": {
+        "noNestedTernary": "off"
       },
       "performance": {
         "noNamespaceImport": "off"
