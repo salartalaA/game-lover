@@ -2,7 +2,13 @@ import { Gamepad2, Plus, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-export default function Header() {
+export default function Header({
+  searchState,
+  setSearchState,
+}: {
+  searchState: string;
+  setSearchState: (value: string) => void;
+}) {
   return (
     <header className="sticky top-0 z-40 border-border border-b bg-background/80 backdrop-blur-xl">
       <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6">
@@ -29,7 +35,9 @@ export default function Header() {
               />
               <Input
                 className="flex h-9 border-border bg-secondary pl-9 text-base shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                onChange={(e) => setSearchState(e.target.value)}
                 placeholder="Search games..."
+                value={searchState}
               />
             </div>
             <Button className="gap-2 rounded-lg px-4 py-4.5 shadow hover:bg-primary/90 focus-visible:ring-1 focus-visible:ring-ring">

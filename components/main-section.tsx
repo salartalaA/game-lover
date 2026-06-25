@@ -22,7 +22,7 @@ import type { GameCardItem } from "../types/game-card";
 import GameCard from "./game-card";
 import { Button } from "./ui/button";
 
-export default function MainSection() {
+export default function MainSection({ searchState }: { searchState: string }) {
   const filterOptions = [
     "Recently Added",
     "Alphabetical",
@@ -52,9 +52,9 @@ export default function MainSection() {
     },
   ] as const;
 
-  type Category = (typeof categories)[number]["title"];
+  type Status = (typeof categories)[number]["title"];
 
-  const [activeCategory, setActiveCategory] = useState<Category>("All Games");
+  const [activeCategory, setActiveCategory] = useState<Status>("All Games");
 
   const gamesInformation: GameCardItem[] = [
     {
@@ -143,6 +143,18 @@ export default function MainSection() {
     },
   ];
 
+  const filteredCollection = gamesInformation.filter((item) => {
+    const filteredGames = item.title
+      .toLowerCase()
+      .includes(searchState.toLowerCase());
+
+    const filteredCategory =
+      activeCategory === "All Games" ||
+      item.status.toLowerCase() === activeCategory.toLowerCase();
+
+    return filteredGames && filteredCategory;
+  });
+
   return (
     <div>
       <div className="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
@@ -175,41 +187,49 @@ export default function MainSection() {
       </div>
 
       <div className="mb-6 flex items-center gap-2 overflow-x-auto pb-1">
-        {categories.map((category) => (
+        {categories.map((status) => (
           <Button
             className={cn(
               "whitespace-nowrap rounded-lg px-4 py-4.5 font-medium text-sm transition-all",
-              activeCategory === category.title
+              activeCategory === status.title
                 ? "bg-primary text-primary-foreground shadow-md shadow-primary/20"
                 : "bg-secondary text-muted-foreground hover:bg-secondary/80 hover:text-foreground"
             )}
-            key={category.title}
-            onClick={() => setActiveCategory(category.title)}
+            key={status.title}
+            onClick={() => setActiveCategory(status.title)}
           >
-            {category.title}
-            {"amount" in category && (
-              <span className="text-xs opacity-70">{category.amount}</span>
+            {status.title}
+            {"amount" in status && (
+              <span className="text-xs opacity-70">{status.amount}</span>
             )}
           </Button>
         ))}
       </div>
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-        {gamesInformation.map((information) => (
-          <GameCard
-            Icon={information.Icon}
-            imageUrl={information.imageUrl}
-            key={information.title}
-            PlatformIcon={information.PlatformIcon}
-            platform={information.platform}
-            platformColor={information.platformColor}
-            playTime={information.playTime}
-            score={information.score}
-            status={information.status}
-            statusColor={information.statusColor}
-            title={information.title}
-          />
-        ))}
+        {filteredCollection.length > 0
+          ? filteredCollection.map((collection) => (
+              <GameCard
+                Icon={collection.Icon}
+                imageUrl={collection.imageUrl}
+                key={collection.title}
+                PlatformIcon={collection.PlatformIcon}
+                platform={collection.platform}
+                platformColor={collection.platformColor}
+                playTime={collection.playTime}
+                score={collection.score}
+                status={collection.status}
+                statusColor={collection.statusColor}
+                title={collection.title}
+              />
+            ))
+          : ""}
       </div>
+
+      {filteredCollection.length === 0 && (
+        <div className="py-16 text-center">
+          <p className="text-muted-foreground">No games match your filters.</p>
+        </div>
+      )}
     </div>
   );
 }
