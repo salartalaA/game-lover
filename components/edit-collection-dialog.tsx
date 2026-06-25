@@ -13,6 +13,7 @@ import {
 import { Field, FieldGroup } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
 import {
   Select,
   SelectContent,
@@ -24,16 +25,25 @@ import {
 import { Slider } from "./ui/slider";
 import { Textarea } from "./ui/textarea";
 
-export default function EditCollectionDialog() {
+export default function EditCollectionDialog({
+  formClassName,
+  buttonClassName,
+}: {
+  formClassName?: string;
+  buttonClassName?: string;
+}) {
   const [completion, setCompletion] = useState<number[]>([0]);
   const [score, setScore] = useState<number>(0);
 
   return (
     <Dialog>
-      <form className="w-1/2">
+      <form className={formClassName}>
         <DialogTrigger asChild>
           <Button
-            className="mx-auto flex w-full flex-1 items-center justify-center gap-1.5 rounded-md py-1.5 text-muted-foreground text-xs transition-all hover:bg-primary/10 hover:text-primary"
+            className={cn(
+              "mx-auto flex w-full flex-1 items-center justify-center gap-1.5 rounded-md py-1.5 text-muted-foreground text-xs transition-all hover:bg-primary/10 hover:text-primary",
+              buttonClassName
+            )}
             variant={"ghost"}
           >
             <Pencil size={12} /> Edit

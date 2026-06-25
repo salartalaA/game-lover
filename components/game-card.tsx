@@ -1,6 +1,6 @@
 "use client";
 
-import { Clock, Star, Trash } from "lucide-react";
+import { Clock, Star, Trash2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
@@ -22,7 +22,7 @@ export default function GameCard({
 }: GameCardItem) {
   return (
     <div className="group relative overflow-hidden rounded-xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-primary/5 hover:shadow-xl">
-      <Link className="block" href={"game-id-test"}>
+      <Link className="block" href={`collection/${title}`}>
         <div className="relative aspect-3/4 overflow-hidden bg-secondary">
           <Image
             alt={title}
@@ -94,13 +94,13 @@ export default function GameCard({
           </span>
         </div>
         <div className="flex items-center gap-1 border-border border-t pt-1">
-          <EditCollectionDialog />
+          <EditCollectionDialog formClassName="w-1/2" />
 
           <Button
             className="flex flex-1 items-center justify-center gap-1.5 rounded-md py-1.5 text-muted-foreground text-xs transition-all hover:bg-destructive/10 hover:text-destructive"
             variant={"ghost"}
           >
-            <Trash size={12} /> Delete
+            <Trash2 size={12} /> Delete
           </Button>
         </div>
       </div>
