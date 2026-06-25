@@ -1,6 +1,6 @@
-import { Gamepad2, Plus, Search } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Gamepad2, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import AddCollectionDialog from "./add-collection-dialog";
 
 export default function Header({
   searchState,
@@ -40,9 +40,8 @@ export default function Header({
                 value={searchState}
               />
             </div>
-            <Button className="gap-2 rounded-lg px-4 py-4.5 shadow hover:bg-primary/90 focus-visible:ring-1 focus-visible:ring-ring">
-              <Plus /> <span className="hidden sm:inline">Add Game</span>
-            </Button>
+
+            <AddCollectionDialog />
           </div>
         </div>
       </div>
