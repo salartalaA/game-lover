@@ -58,7 +58,7 @@ export default function GameCard({
       </Link>
 
       <div className="flex flex-col gap-y-3 p-4">
-        <Link href={"game-url"}>
+        <Link href={`collection/${id}`}>
           <h3 className="truncate font-heading font-semibold text-foreground transition-colors group-hover:text-primary">
             {title}
           </h3>
