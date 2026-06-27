@@ -1,19 +1,24 @@
 import { CircleCheck, Gamepad2, Heart, Play } from "lucide-react";
+import type { CollectionStats } from "@/types/collection";
 
-export default function CollectionStatus() {
+export default function CollectionStatus({
+  collectionStats,
+}: {
+  collectionStats: CollectionStats;
+}) {
   const statusItems = [
     {
       id: "total-games",
       title: "Total Games",
       icon: Gamepad2,
-      amount: 7,
+      amount: collectionStats.totalGames,
       color: "from-purple-500 to-violet-600",
     },
     {
       id: "currently-playing",
       title: "Currently Playing",
       icon: Play,
-      amount: 2,
+      amount: collectionStats.currentlyPlaying,
       color: "from-emerald-500 to-emerald-600",
     },
     {
@@ -21,14 +26,14 @@ export default function CollectionStatus() {
       title: "Completed",
       icon: CircleCheck,
       color: "from-blue-500 to-cyan-600",
-      amount: 2,
+      amount: collectionStats.completed,
     },
     {
       id: "wish-list",
       title: "Wishlist",
       icon: Heart,
       color: "from-pink-500 to-rose-600",
-      amount: 2,
+      amount: collectionStats.wishlist,
     },
   ] as const;
 

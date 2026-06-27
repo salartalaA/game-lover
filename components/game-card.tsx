@@ -1,34 +1,34 @@
-"use client";
-
 import { Clock, Star, Trash2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { deleteCollectionById } from "@/actions/collection";
 import { cn } from "@/lib/utils";
-import type { GameCardItem } from "../types/game-card";
+import type { GameCardItem } from "@/types/collection";
 import EditCollectionDialog from "./edit-collection-dialog";
 import { Button } from "./ui/button";
 
 export default function GameCard({
+  id,
   title,
-  imageUrl,
+  imageURL,
   status,
   Icon,
   platform,
   PlatformIcon,
   score,
-  playTime,
+  playtime,
   statusColor,
   platformColor,
 }: GameCardItem) {
   return (
     <div className="group relative overflow-hidden rounded-xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-primary/5 hover:shadow-xl">
-      <Link className="block" href={`collection/${title}`}>
+      <Link className="block" href={`collection/${id}`}>
         <div className="relative aspect-3/4 overflow-hidden bg-secondary">
           <Image
             alt={title}
             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
             height={100}
-            src={imageUrl}
+            src={imageURL}
             unoptimized
             width={100}
           />
@@ -90,7 +90,7 @@ export default function GameCard({
             })}
           </div>
           <span className="flex items-center gap-1 text-muted-foreground text-xs">
-            <Clock size={12} /> {playTime}h
+            <Clock size={12} /> {playtime}h
           </span>
         </div>
         <div className="flex items-center gap-1 border-border border-t pt-1">
@@ -98,6 +98,7 @@ export default function GameCard({
 
           <Button
             className="flex flex-1 items-center justify-center gap-1.5 rounded-md py-1.5 text-muted-foreground text-xs transition-all hover:bg-destructive/10 hover:text-destructive"
+            onClick={async () => await deleteCollectionById(id)}
             variant={"ghost"}
           >
             <Trash2 size={12} /> Delete

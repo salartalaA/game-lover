@@ -2,13 +2,21 @@ import type { LucideIcon } from "lucide-react";
 
 export interface GameCardItem {
   Icon: LucideIcon;
-  imageUrl: string;
+  id: string;
+  imageURL: string;
   PlatformIcon: LucideIcon;
   platform: string;
   platformColor: string;
-  playTime: number;
+  playtime: number;
   score: number;
   status: string;
   statusColor: string;
   title: string;
+}
+
+export interface CollectionStats {
+  completed: number;
+  currentlyPlaying: number;
+  totalGames: number;
+  wishlist: number;
 }

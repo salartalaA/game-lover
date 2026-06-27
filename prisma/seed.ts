@@ -1,0 +1,192 @@
+import { PrismaPg } from "@prisma/adapter-pg";
+import { type Prisma, PrismaClient } from "../app/generated/prisma/client";
+import "dotenv/config";
+
+const adapter = new PrismaPg({
+  connectionString: process.env.DATABASE_URL,
+});
+
+const prisma = new PrismaClient({
+  adapter,
+});
+
+const collectionData: Prisma.CollectionCreateInput[] = [
+  {
+    title: "Cyberpunk 2077",
+    imageURL: "https://images.unsplash.com/photo-1542751371-adc38448a05e",
+    platform: "PC",
+    status: "PLAYING",
+    score: 4,
+    playtime: 85,
+    completeion: 38,
+    note: "Loving the story and Night City. Currently finishing side quests.",
+  },
+  {
+    title: "The Legend of Zelda: Tears of the Kingdom",
+    imageURL: "https://images.unsplash.com/photo-1551103782-8ab07afd45c1",
+    platform: "NINTENDO_SWITCH",
+    status: "COMPLETED",
+    score: 5,
+    playtime: 120,
+    completeion: 100,
+    note: "An incredible adventure with amazing exploration and puzzles.",
+  },
+  {
+    title: "Starfield",
+    imageURL: "https://images.unsplash.com/photo-1614732414444-096e5f1122d5",
+    platform: "XBOX",
+    status: "BACKLOG",
+    score: 3,
+    playtime: 12,
+    completeion: 8,
+    note: "Started the campaign but decided to continue later.",
+  },
+  {
+    title: "Elden Ring",
+    imageURL: "https://images.unsplash.com/photo-1511512578047-dfb367046420",
+    platform: "PC",
+    status: "PLAYING",
+    score: 5,
+    playtime: 200,
+    completeion: 82,
+    note: "Exploring optional bosses before finishing the main story.",
+  },
+  {
+    title: "Final Fantasy XVI",
+    imageURL: "https://images.unsplash.com/photo-1552820728-8b83bb6b2b28",
+    platform: "PLAYSTATION",
+    status: "WISHLIST",
+    score: 0,
+    playtime: 0,
+    completeion: 0,
+    note: "Waiting for a good discount before buying.",
+  },
+  {
+    title: "Halo Infinite",
+    imageURL: "https://images.unsplash.com/photo-1493711662062-fa541adb3fc8",
+    platform: "XBOX",
+    status: "COMPLETED",
+    score: 5,
+    playtime: 35,
+    completeion: 100,
+    note: "Finished the campaign and really enjoyed the gameplay.",
+  },
+  {
+    title: "Hollow Knight: Silksong",
+    imageURL: "https://images.unsplash.com/photo-1550745165-9bc0b252726f",
+    platform: "PC",
+    status: "WISHLIST",
+    score: 0,
+    playtime: 0,
+    completeion: 0,
+    note: "Can't wait for the official release.",
+  },
+  {
+    title: "Red Dead Redemption 2",
+    imageURL: "https://images.unsplash.com/photo-1511884642898-4c92249e20b6",
+    platform: "PLAYSTATION",
+    status: "COMPLETED",
+    score: 5,
+    playtime: 148,
+    completeion: 100,
+    note: "Completed every side mission and loved the emotional ending.",
+  },
+  {
+    title: "Baldur's Gate 3",
+    imageURL: "https://images.unsplash.com/photo-1542751110-97427bbecf20",
+    platform: "PC",
+    status: "PLAYING",
+    score: 5,
+    playtime: 72,
+    completeion: 46,
+    note: "Playing a Dark Urge run and discovering new dialogue options.",
+  },
+  {
+    title: "Resident Evil 4 Remake",
+    imageURL: "https://images.unsplash.com/photo-1511512578047-dfb367046420",
+    platform: "PC",
+    status: "COMPLETED",
+    score: 5,
+    playtime: 28,
+    completeion: 100,
+    note: "Excellent remake with modern gameplay improvements.",
+  },
+  {
+    title: "Minecraft",
+    imageURL: "https://images.unsplash.com/photo-1493711662062-fa541adb3fc8",
+    platform: "PC",
+    status: "PLAYING",
+    score: 4,
+    playtime: 320,
+    completeion: 60,
+    note: "Currently building a large survival village with friends.",
+  },
+  {
+    title: "God of War Ragnarök",
+    imageURL: "https://images.unsplash.com/photo-1550745165-9bc0b252726f",
+    platform: "PLAYSTATION",
+    status: "BACKLOG",
+    score: 0,
+    playtime: 0,
+    completeion: 0,
+    note: "Installed and ready to start after finishing my current games.",
+  },
+  {
+    title: "Forza Horizon 5",
+    imageURL: "https://images.unsplash.com/photo-1503376780353-7e6692767b70",
+    platform: "XBOX",
+    status: "PLAYING",
+    score: 4,
+    playtime: 44,
+    completeion: 31,
+    note: "Mostly completing seasonal events and collecting new cars.",
+  },
+  {
+    title: "Persona 5 Royal",
+    imageURL: "https://images.unsplash.com/photo-1545239351-1141bd82e8a6",
+    platform: "PLAYSTATION",
+    status: "BACKLOG",
+    score: 0,
+    playtime: 6,
+    completeion: 5,
+    note: "Only finished the first palace. Planning to continue soon.",
+  },
+  {
+    title: "Black Myth: Wukong",
+    imageURL: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5",
+    platform: "PC",
+    status: "WISHLIST",
+    score: 0,
+    playtime: 0,
+    completeion: 0,
+    note: "Waiting for performance improvements before purchasing.",
+  },
+  {
+    title: "Ghost of Tsushima",
+    imageURL: "https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2",
+    platform: "PLAYSTATION",
+    status: "COMPLETED",
+    score: 5,
+    playtime: 63,
+    completeion: 100,
+    note: "Finished both the main story and Iki Island expansion.",
+  },
+  {
+    title: "Hades II",
+    imageURL: "https://images.unsplash.com/photo-1515879218367-8466d910aaa4",
+    platform: "PC",
+    status: "PLAYING",
+    score: 4,
+    playtime: 21,
+    completeion: 27,
+    note: "Enjoying the Early Access content while waiting for the full release.",
+  },
+];
+
+export async function main() {
+  for (const u of collectionData) {
+    await prisma.collection.create({ data: u });
+  }
+}
+
+main();

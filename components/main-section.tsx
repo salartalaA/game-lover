@@ -1,14 +1,6 @@
-"use client";
-import {
-  CircleCheck,
-  Clock,
-  Gamepad2,
-  Heart,
-  Monitor,
-  Play,
-  SlidersHorizontal,
-} from "lucide-react";
+import { SlidersHorizontal } from "lucide-react";
 import { useState } from "react";
+import type { Collection } from "@/app/generated/prisma/client";
 import {
   Combobox,
   ComboboxContent,
@@ -17,12 +9,19 @@ import {
   ComboboxItem,
   ComboboxList,
 } from "@/components/ui/combobox";
+import { PLATFORM_CONFIG } from "@/config/platform-config";
+import { STATUS_CONFIG } from "@/config/status-config";
 import { cn } from "@/lib/utils";
-import type { GameCardItem } from "../types/game-card";
 import GameCard from "./game-card";
 import { Button } from "./ui/button";
 
-export default function MainSection({ searchState }: { searchState: string }) {
+export default function MainSection({
+  searchState,
+  collection,
+}: {
+  searchState: string;
+  collection: Collection[];
+}) {
   const filterOptions = [
     "Recently Added",
     "Alphabetical",
@@ -53,107 +52,42 @@ export default function MainSection({ searchState }: { searchState: string }) {
   ] as const;
 
   type Status = (typeof categories)[number]["title"];
+  type FilterOption = (typeof filterOptions)[number];
 
   const [activeCategory, setActiveCategory] = useState<Status>("All Games");
+  const [sortBy, setSortBy] = useState<FilterOption>("Recently Added");
 
-  const gamesInformation: GameCardItem[] = [
-    {
-      title: "Cyberpunk 2077",
-      status: "Playing",
-      Icon: Play,
-      imageUrl: "https://images.unsplash.com/photo-1542751371-adc38448a05e",
-      platform: "PC",
-      PlatformIcon: Monitor,
-      score: 4,
-      playTime: 85,
-      statusColor: "text-emerald-400 bg-emerald-400/10 border-emerald-400/20",
-      platformColor: "text-blue-400 bg-blue-400/10 border-blue-400/20",
-    },
-    {
-      title: "The Legend of Zelda: Tears of the Kingdom",
-      status: "Completed",
-      Icon: CircleCheck,
-      imageUrl: "https://images.unsplash.com/photo-1551103782-8ab07afd45c1",
-      platform: "Nintendo Switch",
-      PlatformIcon: Gamepad2,
-      score: 5,
-      playTime: 120,
-      statusColor: "text-blue-400 bg-blue-400/10 border-blue-400/20",
-      platformColor: "text-red-400 bg-red-400/10 border-red-400/20",
-    },
-    {
-      title: "Starfield",
-      status: "Backlog",
-      Icon: Clock,
-      imageUrl: "https://images.unsplash.com/photo-1614732414444-096e5f1122d5",
-      platform: "Xbox",
-      PlatformIcon: Gamepad2,
-      score: 3,
-      playTime: 12,
-      statusColor: "text-amber-400 bg-amber-400/10 border-amber-400/20",
-      platformColor: "text-green-400 bg-green-400/10 border-green-400/20",
-    },
-    {
-      title: "Elden Ring",
-      status: "Playing",
-      Icon: Play,
-      imageUrl: "https://images.unsplash.com/photo-1511512578047-dfb367046420",
-      platform: "PC",
-      PlatformIcon: Monitor,
-      score: 5,
-      playTime: 200,
-      statusColor: "text-emerald-400 bg-emerald-400/10 border-emerald-400/20",
-      platformColor: "text-blue-400 bg-blue-400/10 border-blue-400/20",
-    },
-    {
-      title: "Final Fantasy XVI",
-      status: "Wishlist",
-      Icon: Heart,
-      imageUrl: "https://images.unsplash.com/photo-1552820728-8b83bb6b2b28",
-      platform: "PlayStation",
-      PlatformIcon: Gamepad2,
-      score: 0,
-      playTime: 0,
-      statusColor: "text-pink-400 bg-pink-400/10 border-pink-400/20",
-      platformColor: "text-indigo-400 bg-indigo-400/10 border-indigo-400/20",
-    },
-    {
-      title: "Halo Infinite",
-      status: "Completed",
-      Icon: CircleCheck,
-      imageUrl: "https://images.unsplash.com/photo-1493711662062-fa541adb3fc8",
-      platform: "Xbox",
-      PlatformIcon: Gamepad2,
-      score: 5,
-      playTime: 35,
-      statusColor: "text-blue-400 bg-blue-400/10 border-blue-400/20",
-      platformColor: "text-green-400 bg-green-400/10 border-green-400/20",
-    },
-    {
-      title: "Hollow Knight: Silksong",
-      status: "Wishlist",
-      Icon: Heart,
-      imageUrl: "https://images.unsplash.com/photo-1550745165-9bc0b252726f",
-      platform: "PC",
-      PlatformIcon: Monitor,
-      score: 0,
-      playTime: 0,
-      statusColor: "text-pink-400 bg-pink-400/10 border-pink-400/20",
-      platformColor: "text-blue-400 bg-blue-400/10 border-blue-400/20",
-    },
-  ];
+  const filteredCollection = collection
+    .filter((item) => {
+      const filteredGames = item.title
+        .toLowerCase()
+        .includes(searchState.toLowerCase());
 
-  const filteredCollection = gamesInformation.filter((item) => {
-    const filteredGames = item.title
-      .toLowerCase()
-      .includes(searchState.toLowerCase());
+      const filteredCategory =
+        activeCategory === "All Games" ||
+        item.status.toLowerCase() === activeCategory.toLowerCase();
 
-    const filteredCategory =
-      activeCategory === "All Games" ||
-      item.status.toLowerCase() === activeCategory.toLowerCase();
+      return filteredGames && filteredCategory;
+    })
+    .sort((a, b) => {
+      const dateA = new Date(a.createdAt).getTime();
+      const dateB = new Date(b.createdAt).getTime();
 
-    return filteredGames && filteredCategory;
-  });
+      if (sortBy === "Recently Added") {
+        return dateB - dateA;
+      }
+      if (sortBy === "Highest Rating") {
+        return b.score - a.score;
+      }
+      if (sortBy === "Most Played") {
+        return b.playtime - a.playtime;
+      }
+      if (sortBy === "Alphabetical") {
+        return a.title.localeCompare(b.title);
+      }
+
+      return 0;
+    });
 
   return (
     <div>
@@ -162,7 +96,16 @@ export default function MainSection({ searchState }: { searchState: string }) {
           My Collection
         </h2>
 
-        <Combobox defaultValue={filterOptions[0]} items={filterOptions}>
+        <Combobox
+          defaultValue={"Recently Added"}
+          items={filterOptions}
+          // onValueChange={setSortBy}
+          onValueChange={(value) => {
+            if (value && filterOptions.includes(value as FilterOption)) {
+              setSortBy(value as FilterOption);
+            }
+          }}
+        >
           <div className="relative w-44">
             <SlidersHorizontal className="absolute top-1/2 left-3 z-10 size-4 -translate-y-1/2 text-muted-foreground" />
 
@@ -209,16 +152,17 @@ export default function MainSection({ searchState }: { searchState: string }) {
         {filteredCollection.length > 0
           ? filteredCollection.map((collection) => (
               <GameCard
-                Icon={collection.Icon}
-                imageUrl={collection.imageUrl}
-                key={collection.title}
-                PlatformIcon={collection.PlatformIcon}
-                platform={collection.platform}
-                platformColor={collection.platformColor}
-                playTime={collection.playTime}
+                Icon={STATUS_CONFIG[collection.status].icon}
+                id={collection.id}
+                imageURL={collection.imageURL}
+                key={collection.id}
+                PlatformIcon={PLATFORM_CONFIG[collection.platform].icon}
+                platform={PLATFORM_CONFIG[collection.platform].label}
+                platformColor={PLATFORM_CONFIG[collection.platform].className}
+                playtime={collection.playtime}
                 score={collection.score}
-                status={collection.status}
-                statusColor={collection.statusColor}
+                status={STATUS_CONFIG[collection.status].label}
+                statusColor={STATUS_CONFIG[collection.status].className}
                 title={collection.title}
               />
             ))
