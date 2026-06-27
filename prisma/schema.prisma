@@ -22,7 +22,7 @@ model Collection {
 
   score               Int
   playtime            Int
-  completeion         Int
+  completion          Int
 
   note                String?
   

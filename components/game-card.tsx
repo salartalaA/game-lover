@@ -1,7 +1,9 @@
-import { Clock, Star, Trash2 } from "lucide-react";
+import { Clock, Loader, Star, Trash2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import { deleteCollectionById } from "@/actions/collection";
+import type { Collection } from "@/app/generated/prisma/client";
 import { cn } from "@/lib/utils";
 import type { GameCardItem } from "@/types/collection";
 import EditCollectionDialog from "./edit-collection-dialog";
@@ -19,7 +21,15 @@ export default function GameCard({
   playtime,
   statusColor,
   platformColor,
-}: GameCardItem) {
+  collection,
+}: GameCardItem & { collection: Collection }) {
+  const [btnLoading, setBtnLoading] = useState(false);
+
+  const handleDeleteCollection = async (id: string) => {
+    setBtnLoading(true);
+    await deleteCollectionById(id);
+  };
+
   return (
     <div className="group relative overflow-hidden rounded-xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-primary/5 hover:shadow-xl">
       <Link className="block" href={`collection/${id}`}>
@@ -94,14 +104,27 @@ export default function GameCard({
           </span>
         </div>
         <div className="flex items-center gap-1 border-border border-t pt-1">
-          <EditCollectionDialog formClassName="w-1/2" />
+          <EditCollectionDialog
+            collection={collection}
+            formClassName="w-1/2"
+            id={id}
+          />
 
           <Button
             className="flex flex-1 items-center justify-center gap-1.5 rounded-md py-1.5 text-muted-foreground text-xs transition-all hover:bg-destructive/10 hover:text-destructive"
-            onClick={async () => await deleteCollectionById(id)}
+            disabled={btnLoading}
+            onClick={() => handleDeleteCollection(id)}
             variant={"ghost"}
           >
-            <Trash2 size={12} /> Delete
+            {btnLoading ? (
+              <span>
+                <Loader className="animate-spin" />
+              </span>
+            ) : (
+              <>
+                <Trash2 size={12} /> Delete
+              </>
+            )}
           </Button>
         </div>
       </div>

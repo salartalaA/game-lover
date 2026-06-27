@@ -12,15 +12,18 @@ import {
 import { PLATFORM_CONFIG } from "@/config/platform-config";
 import { STATUS_CONFIG } from "@/config/status-config";
 import { cn } from "@/lib/utils";
+import type { CollectionStats } from "@/types/collection";
 import GameCard from "./game-card";
 import { Button } from "./ui/button";
 
 export default function MainSection({
   searchState,
   collection,
+  collectionStats,
 }: {
   searchState: string;
   collection: Collection[];
+  collectionStats: CollectionStats;
 }) {
   const filterOptions = [
     "Recently Added",
@@ -35,19 +38,19 @@ export default function MainSection({
     },
     {
       title: "Playing",
-      amount: 2,
+      amount: collectionStats.currentlyPlaying,
     },
     {
       title: "Completed",
-      amount: 2,
+      amount: collectionStats.completed,
     },
     {
       title: "Backlog",
-      amount: 1,
+      amount: collectionStats.backlog,
     },
     {
       title: "Wishlist",
-      amount: 2,
+      amount: collectionStats.wishlist,
     },
   ] as const;
 
@@ -152,6 +155,7 @@ export default function MainSection({
         {filteredCollection.length > 0
           ? filteredCollection.map((collection) => (
               <GameCard
+                collection={collection}
                 Icon={STATUS_CONFIG[collection.status].icon}
                 id={collection.id}
                 imageURL={collection.imageURL}

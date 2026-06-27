@@ -22,7 +22,11 @@ export default function MainPage({
       <main className="mx-auto max-w-7xl space-y-8 px-4 py-6 sm:px-6">
         <CollectionStatus collectionStats={collectionStats} />
 
-        <MainSection collection={collection} searchState={searchState} />
+        <MainSection
+          collection={collection}
+          collectionStats={collectionStats}
+          searchState={searchState}
+        />
       </main>
     </div>
   );

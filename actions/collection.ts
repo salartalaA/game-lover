@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import prisma from "@/lib/prisma";
+import type { NewCollection, UpdatedCollection } from "@/types/collection";
 
 export async function getCollection() {
   return await prisma.collection.findMany();
@@ -13,18 +14,6 @@ export async function getCollectionById(id: string) {
       id,
     },
   });
-}
-
-export async function deleteCollectionById(id: string) {
-  const deletedCollection = await prisma.collection.delete({
-    where: {
-      id,
-    },
-  });
-
-  revalidatePath("/");
-
-  return deletedCollection;
 }
 
 export async function getCollectionStats() {
@@ -50,5 +39,80 @@ export async function getCollectionStats() {
     wishlist:
       groupedStats.find((item) => item.status === "WISHLIST")?._count.status ??
       0,
+    backlog:
+      groupedStats.find((item) => item.status === "BACKLOG")?._count.status ??
+      0,
   };
+}
+
+export async function deleteCollectionById(id: string) {
+  const deletedCollection = await prisma.collection.delete({
+    where: {
+      id,
+    },
+  });
+
+  revalidatePath("/");
+
+  return deletedCollection;
+}
+
+export async function addCollection({
+  title,
+  completion,
+  imageURL,
+  platform,
+  playtime,
+  score,
+  status,
+  note,
+}: NewCollection) {
+  const newCollection = await prisma.collection.create({
+    data: {
+      title,
+      completion,
+      imageURL,
+      platform,
+      playtime,
+      score,
+      status,
+      note,
+    },
+  });
+
+  revalidatePath("/");
+
+  return newCollection;
+}
+
+export async function editCollectionById({
+  id,
+  title,
+  completion,
+  imageURL,
+  platform,
+  playtime,
+  score,
+  status,
+  note,
+}: UpdatedCollection) {
+  const updatedData = await prisma.collection.update({
+    data: {
+      title,
+      completion,
+      imageURL,
+      platform,
+      playtime,
+      score,
+      status,
+      note,
+    },
+    where: {
+      id,
+    },
+  });
+
+  revalidatePath("/");
+
+  return updatedData;
 }

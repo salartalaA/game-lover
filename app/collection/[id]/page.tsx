@@ -119,7 +119,7 @@ export default async function GamePage({
               })}
             </div>
 
-            <InteractiveButtons id={id} />
+            <InteractiveButtons gameInformation={gameInformation} id={id} />
           </div>
         </div>
         <div className="mb-8 grid gap-4 sm:grid-cols-2">
@@ -142,12 +142,12 @@ export default async function GamePage({
               <div className="mb-2 flex items-center justify-between text-sm">
                 <span className="text-muted-foreground">Completion</span>
                 <span className="font-medium">
-                  {gameInformation.completeion}%
+                  {gameInformation.completion}%
                 </span>
               </div>
               <Progress
                 className="relative h-2 w-full overflow-hidden rounded-full bg-primary/20"
-                value={gameInformation.completeion}
+                value={gameInformation.completion}
               />
             </div>
           </div>
@@ -181,14 +181,16 @@ export default async function GamePage({
           </div>
         </div>
 
-        <div className="rounded-xl border border-border bg-card p-5">
-          <h3 className="mb-3 font-heading font-semibold text-foreground">
-            Personal Notes
-          </h3>
-          <p className="whitespace-pre-wrap text-muted-foreground text-sm leading-relaxed">
-            {gameInformation.note}
-          </p>
-        </div>
+        {gameInformation.note && (
+          <div className="rounded-xl border border-border bg-card p-5">
+            <h3 className="mb-3 font-heading font-semibold text-foreground">
+              Personal Notes
+            </h3>
+            <p className="whitespace-pre-wrap text-muted-foreground text-sm leading-relaxed">
+              {gameInformation.note}
+            </p>
+          </div>
+        )}
       </main>
     </div>
   );
