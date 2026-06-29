@@ -97,7 +97,7 @@ export default async function GamePage({
 
             <div className="flex items-center gap-0.5">
               {Array.from({ length: 5 }, (_, index) => {
-                const filled = index < 4;
+                const filled = gameInformation.score < 4;
 
                 return (
                   <button
