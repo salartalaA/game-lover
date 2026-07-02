@@ -20,10 +20,12 @@ export default function MainSection({
   searchState,
   collection,
   collectionStats,
+  userId,
 }: {
   searchState: string;
   collection: Collection[];
   collectionStats: CollectionStats;
+  userId: string;
 }) {
   const filterOptions = [
     "Recently Added",
@@ -168,6 +170,7 @@ export default function MainSection({
                 status={STATUS_CONFIG[collection.status].label}
                 statusColor={STATUS_CONFIG[collection.status].className}
                 title={collection.title}
+                userId={userId}
               />
             ))
           : ""}
@@ -175,7 +178,7 @@ export default function MainSection({
 
       {filteredCollection.length === 0 && (
         <div className="py-16 text-center">
-          <p className="text-muted-foreground">No games match your filters.</p>
+          <p className="text-muted-foreground">No games found.</p>
         </div>
       )}
     </div>

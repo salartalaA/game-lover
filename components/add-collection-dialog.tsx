@@ -30,9 +30,11 @@ import { Textarea } from "./ui/textarea";
 export default function AddCollectionDialog({
   formClassName,
   buttonClassName,
+  userId,
 }: {
   formClassName?: string;
   buttonClassName?: string;
+  userId: string;
 }) {
   const [openState, setOpenState] = useState(false);
 
@@ -61,6 +63,7 @@ export default function AddCollectionDialog({
       score,
       status,
       note,
+      userId,
     });
 
     setOpenState(false);

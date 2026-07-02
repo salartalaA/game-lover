@@ -11,6 +11,7 @@ import { Button } from "./ui/button";
 
 export default function GameCard({
   id,
+  userId,
   title,
   imageURL,
   status,
@@ -22,12 +23,12 @@ export default function GameCard({
   statusColor,
   platformColor,
   collection,
-}: GameCardItem & { collection: Collection }) {
+}: GameCardItem & { collection: Collection } & { userId: string }) {
   const [btnLoading, setBtnLoading] = useState(false);
 
   const handleDeleteCollection = async (id: string) => {
     setBtnLoading(true);
-    await deleteCollectionById(id);
+    await deleteCollectionById(id, userId);
   };
 
   return (

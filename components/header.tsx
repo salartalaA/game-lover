@@ -1,14 +1,22 @@
-import { Gamepad2, Search } from "lucide-react";
+import { Gamepad2, LogOut, Search } from "lucide-react";
+import { logout } from "@/actions/users";
 import { Input } from "@/components/ui/input";
 import AddCollectionDialog from "./add-collection-dialog";
+import { Button } from "./ui/button";
 
 export default function Header({
+  userId,
   searchState,
   setSearchState,
 }: {
+  userId: string;
   searchState: string;
   setSearchState: (value: string) => void;
 }) {
+  const handleLogOut = async () => {
+    await logout();
+  };
+
   return (
     <header className="sticky top-0 z-40 border-border border-b bg-background/80 backdrop-blur-xl">
       <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6">
@@ -41,8 +49,11 @@ export default function Header({
               />
             </div>
 
-            <AddCollectionDialog />
+            <AddCollectionDialog userId={userId} />
           </div>
+          <Button onClick={handleLogOut}>
+            <LogOut />
+          </Button>
         </div>
       </div>
     </header>

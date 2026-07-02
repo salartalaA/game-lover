@@ -8,9 +8,11 @@ import type { CollectionStats } from "@/types/collection";
 import type { Collection } from "./generated/prisma/client";
 
 export default function MainPage({
+  userId,
   collectionStats,
   collection,
 }: {
+  userId: string;
   collectionStats: CollectionStats;
   collection: Collection[];
 }) {
@@ -18,7 +20,11 @@ export default function MainPage({
 
   return (
     <div className="min-h-screen bg-background">
-      <Header searchState={searchState} setSearchState={setSearchState} />
+      <Header
+        searchState={searchState}
+        setSearchState={setSearchState}
+        userId={userId}
+      />
       <main className="mx-auto max-w-7xl space-y-8 px-4 py-6 sm:px-6">
         <CollectionStatus collectionStats={collectionStats} />
 
@@ -26,6 +32,7 @@ export default function MainPage({
           collection={collection}
           collectionStats={collectionStats}
           searchState={searchState}
+          userId={userId}
         />
       </main>
     </div>

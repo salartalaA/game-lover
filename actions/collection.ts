@@ -4,25 +4,38 @@ import { revalidatePath } from "next/cache";
 import prisma from "@/lib/prisma";
 import type { NewCollection, UpdatedCollection } from "@/types/collection";
 
-export async function getCollection() {
-  return await prisma.collection.findMany();
-}
-
-export async function getCollectionById(id: string) {
-  return await prisma.collection.findUnique({
+export async function getCollection(userId: string) {
+  return await prisma.collection.findMany({
     where: {
-      id,
+      userId,
     },
   });
 }
 
-export async function getCollectionStats() {
+export async function getCollectionById(id: string, userId: string) {
+  return await prisma.collection.findUnique({
+    where: {
+      id,
+      userId,
+    },
+  });
+}
+
+export async function getCollectionStats(userId: string) {
   const [totalGames, groupedStats] = await Promise.all([
-    prisma.collection.count(),
+    prisma.collection.count({
+      where: {
+        userId,
+      },
+    }),
+
     prisma.collection.groupBy({
       by: ["status"],
       _count: {
         status: true,
+      },
+      where: {
+        userId,
       },
     }),
   ]);
@@ -45,10 +58,11 @@ export async function getCollectionStats() {
   };
 }
 
-export async function deleteCollectionById(id: string) {
+export async function deleteCollectionById(id: string, userId: string) {
   const deletedCollection = await prisma.collection.delete({
     where: {
       id,
+      userId,
     },
   });
 
@@ -66,6 +80,7 @@ export async function addCollection({
   score,
   status,
   note,
+  userId,
 }: NewCollection) {
   const newCollection = await prisma.collection.create({
     data: {
@@ -77,6 +92,7 @@ export async function addCollection({
       score,
       status,
       note,
+      userId,
     },
   });
 

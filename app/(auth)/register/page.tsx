@@ -1,10 +1,25 @@
 import { Lock, Mail, UserPlus } from "lucide-react";
+import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import Link from "next/link";
+import { redirect } from "next/navigation";
+import { register } from "@/actions/users";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-export default function Login() {
+export const metadata: Metadata = {
+  title: "Register",
+};
+
+export default async function Register() {
+  const cookieStore = await cookies();
+  const userID = cookieStore.get("userID");
+
+  if (userID) {
+    redirect("/");
+  }
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="w-full max-w-md">
@@ -19,7 +34,7 @@ export default function Login() {
         </div>
 
         <div className="rounded-xl border border-border bg-card p-8 shadow-sm">
-          <form className="space-y-4">
+          <form action={register} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <div className="relative">
@@ -27,6 +42,7 @@ export default function Login() {
                 <Input
                   className="flex h-12 pl-10 shadow-sm"
                   id="email"
+                  name="email"
                   placeholder="you@example.com"
                   required
                   type="email"
@@ -41,6 +57,7 @@ export default function Login() {
                 <Input
                   className="flex h-12 pl-10 shadow-sm placeholder:text-lg placeholder:tracking-wider"
                   id="password"
+                  name="password"
                   placeholder="••••••••"
                   required
                   type="password"
@@ -48,19 +65,20 @@ export default function Login() {
               </div>
             </div>
 
-            <div className="space-y-2">
+            {/* <div className="space-y-2">
               <Label htmlFor="password">Confirm Password</Label>
               <div className="relative">
                 <Lock className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
                   className="flex h-12 pl-10 shadow-sm placeholder:text-lg placeholder:tracking-wider"
-                  id="password"
+                  id="confirmPassword"
+                  name="confirmPassword"
                   placeholder="••••••••"
                   required
                   type="password"
                 />
               </div>
-            </div>
+            </div> */}
 
             <Button className="w-full rounded-lg bg-primary py-6 text-center">
               Create account

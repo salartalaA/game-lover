@@ -1,4 +1,6 @@
 import { ArrowLeft, Calendar, Clock, Star } from "lucide-react";
+import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -10,6 +12,10 @@ import { PLATFORM_CONFIG } from "@/config/platform-config";
 import { STATUS_CONFIG } from "@/config/status-config";
 import { cn } from "@/lib/utils";
 
+export const metadata: Metadata = {
+  title: "Collection Page",
+};
+
 export default async function GamePage({
   params,
 }: {
@@ -17,7 +23,15 @@ export default async function GamePage({
 }) {
   const { id } = await params;
 
-  const gameInformation = await getCollectionById(id);
+  const cookieStore = await cookies();
+
+  const userId = cookieStore.get("userID")?.value;
+
+  if (!userId) {
+    redirect("/login");
+  }
+
+  const gameInformation = await getCollectionById(id, userId);
 
   if (!gameInformation) {
     redirect("/");
@@ -127,7 +141,11 @@ export default async function GamePage({
               })}
             </div>
 
-            <InteractiveButtons gameInformation={gameInformation} id={id} />
+            <InteractiveButtons
+              gameInformation={gameInformation}
+              id={id}
+              userId={userId}
+            />
           </div>
         </div>
         <div className="mb-8 grid gap-4 sm:grid-cols-2">

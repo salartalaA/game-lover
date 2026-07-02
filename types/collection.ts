@@ -32,6 +32,7 @@ export interface NewCollection {
   score: number;
   status: Status;
   title: string;
+  userId: string;
 }
 
 export interface UpdatedCollection {
