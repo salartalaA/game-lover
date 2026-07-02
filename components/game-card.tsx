@@ -38,7 +38,7 @@ export default function GameCard({
             alt={title}
             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
             height={100}
-            src={imageURL}
+            src={imageURL === "" ? "/gamepad.jpg" : imageURL}
             unoptimized
             width={100}
           />

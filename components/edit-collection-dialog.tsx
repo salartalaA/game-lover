@@ -336,7 +336,6 @@ export default function EditCollectionDialog({
                 form="edit-collection-form"
                 id="cover-image-URL"
                 onChange={(e) => setImageURL(e.target.value)}
-                required
                 value={imageURL}
               />
             </Field>
@@ -361,7 +360,7 @@ export default function EditCollectionDialog({
                         <SelectItem value="PC">PC</SelectItem>
                         <SelectItem value="PLAYSTATION">PlayStation</SelectItem>
                         <SelectItem value="XBOX">Xbox</SelectItem>
-                        <SelectItem value="NINTENDO SWITCH">
+                        <SelectItem value="NINTENDO_SWITCH">
                           Nintendo Switch
                         </SelectItem>
                       </SelectGroup>

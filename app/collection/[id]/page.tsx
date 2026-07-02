@@ -44,7 +44,11 @@ export default async function GamePage({
           alt={gameInformation.title}
           className="h-full w-full object-cover"
           height={100}
-          src={gameInformation.imageURL}
+          src={
+            gameInformation.imageURL === ""
+              ? "/gamepad.jpg"
+              : gameInformation.imageURL
+          }
           unoptimized
           width={100}
         />
@@ -65,7 +69,11 @@ export default async function GamePage({
               alt={gameInformation.title}
               className="h-full w-full object-cover"
               height={100}
-              src={gameInformation.imageURL}
+              src={
+                gameInformation.imageURL === ""
+                  ? "/gamepad.jpg"
+                  : gameInformation.imageURL
+              }
               unoptimized
               width={100}
             />
@@ -97,7 +105,7 @@ export default async function GamePage({
 
             <div className="flex items-center gap-0.5">
               {Array.from({ length: 5 }, (_, index) => {
-                const filled = gameInformation.score < 4;
+                const filled = index < gameInformation.score;
 
                 return (
                   <button
