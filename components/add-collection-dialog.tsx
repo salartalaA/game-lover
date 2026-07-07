@@ -250,17 +250,17 @@ export default function AddCollectionDialog({
               />
             </Field>
           </FieldGroup>
-          <DialogFooter className="bg-transparent">
+          <DialogFooter className="bg-transparent max-sm:flex-row">
             <DialogClose asChild>
               <Button
-                className="flex-1 border-border bg-transparent"
+                className="flex-1 border-border bg-transparent max-sm:py-2"
                 variant="outline"
               >
                 Cancel
               </Button>
             </DialogClose>
             <Button
-              className="flex-1"
+              className="flex-1 max-sm:py-2"
               disabled={btnLoading}
               form="add-collection-form"
               type="submit"

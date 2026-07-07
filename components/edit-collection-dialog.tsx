@@ -467,10 +467,10 @@ export default function EditCollectionDialog({
             </Field>
           </FieldGroup>
 
-          <DialogFooter className="bg-transparent">
+          <DialogFooter className="bg-transparent max-sm:flex-row">
             <DialogClose asChild>
               <Button
-                className="flex-1 border-border bg-transparent"
+                className="flex-1 border-border bg-transparent max-sm:py-2"
                 variant="outline"
               >
                 Cancel
@@ -478,7 +478,7 @@ export default function EditCollectionDialog({
             </DialogClose>
 
             <Button
-              className="flex-1"
+              className="flex-1 max-sm:py-2"
               disabled={btnLoading}
               form="edit-collection-form"
               type="submit"

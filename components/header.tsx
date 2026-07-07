@@ -33,6 +33,9 @@ export default function Header({
                 Manage your game collection
               </p>
             </div>
+            <Button className="ml-auto sm:hidden" onClick={handleLogOut}>
+              <LogOut />
+            </Button>
           </div>
 
           <div className="flex flex-1 items-center gap-3">
@@ -51,7 +54,7 @@ export default function Header({
 
             <AddCollectionDialog userId={userId} />
           </div>
-          <Button onClick={handleLogOut}>
+          <Button className="max-sm:hidden" onClick={handleLogOut}>
             <LogOut />
           </Button>
         </div>
