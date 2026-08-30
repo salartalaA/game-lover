@@ -32,7 +32,6 @@ export default function MainPage({
           collection={collection}
           collectionStats={collectionStats}
           searchState={searchState}
-          userId={userId}
         />
       </main>
     </div>

@@ -16,9 +16,23 @@ model User {
   id                  String    @id @default(cuid())
   email               String    @unique
   password            String
-  Collections         Collection[]
+
+  collections         Collection[]
+  session             Session[]
+  
   createdAt           DateTime  @default(now())
   updatedAt           DateTime  @updatedAt
+}
+
+model Session {
+  id                  String    @id
+
+  expires             DateTime
+
+  userId              String
+  user                User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt           DateTime  @default(now())
 }
 
 model Collection {

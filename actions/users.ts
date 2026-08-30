@@ -1,8 +1,8 @@
 "use server";
 
+import crypto from "node:crypto";
 import bcrypt from "bcryptjs";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
 
 export async function register(formData: FormData) {
@@ -19,7 +19,7 @@ export async function register(formData: FormData) {
   });
 
   if (user) {
-    return redirect("/login");
+    return null;
   }
 
   await prisma.user.create({
@@ -29,7 +29,7 @@ export async function register(formData: FormData) {
     },
   });
 
-  redirect("/login");
+  return true;
 }
 
 export async function login(formData: FormData) {
@@ -43,7 +43,7 @@ export async function login(formData: FormData) {
   });
 
   if (!user) {
-    return redirect("/register");
+    return null;
   }
 
   const isPasswordCorrect = await bcrypt.compare(password, user.password);
@@ -52,20 +52,71 @@ export async function login(formData: FormData) {
     return;
   }
 
+  const sessionId = crypto.randomUUID();
+
+  const expires = new Date(Date.now() + 1000 * 60 * 60 * 24 * 7);
+
+  await prisma.session.create({
+    data: {
+      id: sessionId,
+      expires,
+      userId: user.id,
+    },
+  });
+
   const cookieStore = await cookies();
 
-  cookieStore.set("userID", user.id, {
+  cookieStore.set("session", sessionId, {
     httpOnly: true,
     sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
     secure: process.env.NODE_ENV === "production",
-    maxAge: 60 * 60 * 24,
+    expires,
   });
 
-  redirect("/");
+  return true;
 }
 
 export async function logout() {
   const cookieStore = await cookies();
 
-  cookieStore.delete("userID");
+  const sessionId = cookieStore.get("session")?.value;
+
+  if (sessionId) {
+    await prisma.session.deleteMany({
+      where: {
+        id: sessionId,
+      },
+    });
+  }
+
+  cookieStore.delete("session");
+}
+
+export async function getCurrentUser() {
+  const cookieStore = await cookies();
+
+  const sessionId = cookieStore.get("session")?.value;
+
+  if (!sessionId) {
+    return;
+  }
+
+  const session = await prisma.session.findUnique({
+    where: {
+      id: sessionId,
+    },
+    include: {
+      user: true,
+    },
+  });
+
+  if (!session) {
+    return;
+  }
+
+  if (session.expires < new Date()) {
+    return;
+  }
+
+  return session.user;
 }

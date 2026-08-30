@@ -1,10 +1,10 @@
 import { ArrowLeft, Calendar, Clock, Star } from "lucide-react";
 import type { Metadata } from "next";
-import { cookies } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getCollectionById } from "@/actions/collection";
+import { getCurrentUser } from "@/actions/users";
 import InteractiveButtons from "@/components/collection/interactive-buttons";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -23,15 +23,13 @@ export default async function GamePage({
 }) {
   const { id } = await params;
 
-  const cookieStore = await cookies();
+  const currentUser = await getCurrentUser();
 
-  const userId = cookieStore.get("userID")?.value;
-
-  if (!userId) {
+  if (!currentUser) {
     redirect("/login");
   }
 
-  const gameInformation = await getCollectionById(id, userId);
+  const gameInformation = await getCollectionById(id);
 
   if (!gameInformation) {
     redirect("/");
@@ -141,11 +139,7 @@ export default async function GamePage({
               })}
             </div>
 
-            <InteractiveButtons
-              gameInformation={gameInformation}
-              id={id}
-              userId={userId}
-            />
+            <InteractiveButtons gameInformation={gameInformation} id={id} />
           </div>
         </div>
         <div className="mb-8 grid gap-4 sm:grid-cols-2">

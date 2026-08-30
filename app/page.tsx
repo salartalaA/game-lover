@@ -1,9 +1,9 @@
 export const dynamic = "force-dynamic";
 
 import type { Metadata } from "next";
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { getCollection, getCollectionStats } from "@/actions/collection";
+import { getCurrentUser } from "@/actions/users";
 import MainPage from "./_main-page";
 
 export const metadata: Metadata = {
@@ -11,20 +11,23 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-  const cookieStore = await cookies();
-  const userID = cookieStore.get("userID")?.value;
+  const currentUser = await getCurrentUser();
 
-  if (!userID) {
+  if (!currentUser) {
     redirect("/login");
   }
 
-  const collectionStats = await getCollectionStats(userID);
-  const collection = await getCollection(userID);
+  const userID = currentUser.id;
+
+  const collectionStats = await getCollectionStats();
+  const collection = await getCollection();
 
   return (
     <MainPage
-      collection={collection}
-      collectionStats={collectionStats}
+      // biome-ignore lint/style/noNonNullAssertion: I'm sure we have data
+      collection={collection!}
+      // biome-ignore lint/style/noNonNullAssertion: I'm sure we have data
+      collectionStats={collectionStats!}
       userId={userID}
     />
   );

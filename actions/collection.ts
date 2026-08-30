@@ -3,29 +3,48 @@
 import { revalidatePath } from "next/cache";
 import prisma from "@/lib/prisma";
 import type { NewCollection, UpdatedCollection } from "@/types/collection";
+import { getCurrentUser } from "./users";
 
-export async function getCollection(userId: string) {
+export async function getCollection() {
+  const currentUser = await getCurrentUser();
+
+  if (!currentUser) {
+    return;
+  }
+
   return await prisma.collection.findMany({
     where: {
-      userId,
+      userId: currentUser.id,
     },
   });
 }
 
-export async function getCollectionById(id: string, userId: string) {
+export async function getCollectionById(id: string) {
+  const currentUser = await getCurrentUser();
+
+  if (!currentUser) {
+    return;
+  }
+
   return await prisma.collection.findUnique({
     where: {
       id,
-      userId,
+      userId: currentUser.id,
     },
   });
 }
 
-export async function getCollectionStats(userId: string) {
+export async function getCollectionStats() {
+  const currentUser = await getCurrentUser();
+
+  if (!currentUser) {
+    return;
+  }
+
   const [totalGames, groupedStats] = await Promise.all([
     prisma.collection.count({
       where: {
-        userId,
+        userId: currentUser.id,
       },
     }),
 
@@ -35,7 +54,7 @@ export async function getCollectionStats(userId: string) {
         status: true,
       },
       where: {
-        userId,
+        userId: currentUser.id,
       },
     }),
   ]);
@@ -58,11 +77,17 @@ export async function getCollectionStats(userId: string) {
   };
 }
 
-export async function deleteCollectionById(id: string, userId: string) {
+export async function deleteCollectionById(id: string) {
+  const currentUser = await getCurrentUser();
+
+  if (!currentUser) {
+    return;
+  }
+
   const deletedCollection = await prisma.collection.delete({
     where: {
       id,
-      userId,
+      userId: currentUser.id,
     },
   });
 
@@ -80,8 +105,13 @@ export async function addCollection({
   score,
   status,
   note,
-  userId,
 }: NewCollection) {
+  const currentUser = await getCurrentUser();
+
+  if (!currentUser) {
+    return;
+  }
+
   const newCollection = await prisma.collection.create({
     data: {
       title,
@@ -92,7 +122,7 @@ export async function addCollection({
       score,
       status,
       note,
-      userId,
+      userId: currentUser.id,
     },
   });
 

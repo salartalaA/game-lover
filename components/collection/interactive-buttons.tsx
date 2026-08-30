@@ -10,17 +10,15 @@ import { Button } from "../ui/button";
 export default function InteractiveButtons({
   gameInformation,
   id,
-  userId,
 }: {
   gameInformation: Collection;
   id: string;
-  userId: string;
 }) {
   const [btnLoading, setBtnLoading] = useState(false);
 
   const handleDeleteCollection = async (id: string) => {
     setBtnLoading(true);
-    await deleteCollectionById(id, userId);
+    await deleteCollectionById(id);
   };
 
   return (

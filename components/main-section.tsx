@@ -20,12 +20,10 @@ export default function MainSection({
   searchState,
   collection,
   collectionStats,
-  userId,
 }: {
   searchState: string;
   collection: Collection[];
   collectionStats: CollectionStats;
-  userId: string;
 }) {
   const filterOptions = [
     "Recently Added",
@@ -170,7 +168,6 @@ export default function MainSection({
                 status={STATUS_CONFIG[collection.status].label}
                 statusColor={STATUS_CONFIG[collection.status].className}
                 title={collection.title}
-                userId={userId}
               />
             ))
           : ""}
